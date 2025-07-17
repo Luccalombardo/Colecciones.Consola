@@ -4,6 +4,8 @@
 
 
 
+using System.Linq;
+
 namespace List.Consola
 {
     internal class Program
@@ -11,57 +13,148 @@ namespace List.Consola
         static void Main(string[] args)
         {
             List<int> listaNro = new List<int>();
+            bool seguir;
+            string preg;
             int elementList = GetInt("Ingrese la cantidad de elementos que quiere introducir: ");
             for (int i = 0; i < elementList; i++)
             {
                 int nroList = GetInt($"Ingrese el numero para el elemento nro {i+1}: ");
                 listaNro.Add(nroList);
             }
+            int CantidadIndex = listaNro.Count;
+
             //Insertar en lista
-            string preg;
-            bool seguir = true;
-            do
+            OpcionContin("¿Desea insertar algun numero?");
+            string confirmarAccion = GetStringPreg("Ingrese la opcion: ");
+            bool entrar = false;
+            if (confirmarAccion.ToUpper() == "S")
             {
-                int CantidadIndex= listaNro.Count;
-                Console.WriteLine($"Hay {CantidadIndex-1} indices");
-                int indexList = GetIntMax("Ingresa el indice en el que quiere ingresar el nro: ", CantidadIndex);
-                int nroList = GetInt($"Ingrese el nro que quiere poner en la lista en el indice nro {indexList}: ");
-                listaNro.Insert(indexList, nroList);
-
-
-
-                OpcionContin();
-                preg = GetStringPreg("Ingrese la opcion: ");
-                if(preg.ToUpper() == "N")
-                {
-                    seguir = false;
-                }
-                EsperarTecla();
-            } while (seguir);
-            //Eliminar de la lista
-            seguir = true;
-            do
+                 entrar = true;
+            }
+            if (entrar)
             {
-                int CantidadIndex = listaNro.Count;
-                Console.WriteLine($"Hay {CantidadIndex - 1} indices");
                 
-                int nroList = GetInt($"Ingrese el nro que quieres eliminar: ");
-                listaNro.Remove(nroList);
-
-
-
-                OpcionContin();
-                preg = GetStringPreg("Ingrese la opcion: ");
-                if (preg.ToUpper() == "N")
+                seguir = true;
+                do
                 {
-                    seguir = false;
-                }
-                EsperarTecla();
-            } while (seguir);
+
+                    Console.WriteLine($"Hay {CantidadIndex - 1} indices");
+                    int indexList = GetIntMax("Ingresa el indice en el que quiere ingresar el nro: ", CantidadIndex);
+                    int nroList = GetInt($"Ingrese el nro que quiere poner en la lista en el indice nro {indexList}: ");
+                    listaNro.Insert(indexList, nroList);
+
+
+                    CantidadIndex = listaNro.Count();
+                    OpcionContin("¿Desea continuar ingresando algun otro numero a la lista?(Ponga la letra segun la opcion)");
+                    preg = GetStringPreg("Ingrese la opcion: ");
+                    if (preg.ToUpper() == "N")
+                    {
+                        seguir = false;
+                    }
+                    EsperarTecla();
+                } while (seguir);
+            }
+
+            //Eliminar de la lista
+            OpcionContin("¿Desea eliminar algun numero?");
+            confirmarAccion = GetStringPreg("Ingrese la opcion: ");
+            entrar = false;
+            if (confirmarAccion.ToUpper() == "S")
+            {
+                entrar = true;
+            }
+            if (entrar)
+            {
+                seguir = true;
+                do
+                {
+
+                    Console.WriteLine($"Hay {CantidadIndex - 1} indices");
+
+                    int nroList = GetInt($"Ingrese el nro que quieres eliminar: ");
+                    bool existe = false;
+                    for (int i = 0; i < CantidadIndex; i++)
+                    {
+
+                        if (nroList == listaNro[i])
+                        {
+                            existe = true;
+                        }
+
+                    }
+                    if (existe == false)
+                    {
+                        Console.WriteLine("El nro ingresado no existe");
+                    }
+                    listaNro.Remove(nroList);
+
+                    CantidadIndex = listaNro.Count();
+
+
+
+                    Console.WriteLine("");
+
+                    OpcionContin("¿Desea eliminar algo de la lista?(Ponga la letra segun la opcion)");
+                    preg = GetStringPreg("Ingrese la opcion: ");
+                    if (preg.ToUpper() == "N")
+                    {
+                        seguir = false;
+                    }
+                    EsperarTecla();
+                } while (seguir);
+            }
+            Console.WriteLine("Numeros desordenados");
             Console.WriteLine("Sali");
             foreach (int i in listaNro) {
-                Console.WriteLine(i);
+                Console.WriteLine($"Esta el nro {i}");
             }
+            listaNro.Sort();
+            Console.WriteLine("Numeros en orden");
+            foreach (int i in listaNro)
+            {
+                
+                Console.WriteLine($"Esta el nro {i}");
+            }
+            EsperarTecla();
+
+            //Verifica si un número específico está en la lista.
+            OpcionContin("¿Desea saber si algun numero esta en la lista?");
+            confirmarAccion = GetStringPreg("Ingrese la opcion: ");
+            entrar = false;
+            if (confirmarAccion.ToUpper() == "S")
+            {
+                entrar = true;
+            }
+            if (entrar)
+            {
+                seguir = true;
+                do
+                {
+
+                    Console.WriteLine($"Hay {CantidadIndex - 1} indices");
+
+                    int nroList = GetInt($"Ingrese el nro que quiera confirmar si esta: ");
+                    if (listaNro.Contains(nroList))
+                    {
+                        Console.WriteLine($"El nro {nroList} si se encuentra en la lista");
+                    }
+                    else
+                    {
+                        Console.WriteLine($"El nro {nroList} no se encuentra en la lista");
+                    }
+
+
+                    OpcionContin("¿Desea verificar si existe u numero en la lista?(Ponga la letra segun la opcion)");
+                    preg = GetStringPreg("Ingrese la opcion: ");
+                    if (preg.ToUpper() == "N")
+                    {
+                        seguir = false;
+                    }
+                    EsperarTecla();
+                } while (seguir);
+            }
+            //Muestra la cantidad de elementos de la lista.
+            Console.WriteLine($"La cantidad de elemento que hay son {CantidadIndex}");
         }
 
         private static int GetIntMax(string mensaje, int cantidadIndex)
@@ -69,7 +162,7 @@ namespace List.Consola
             do
             {
                 Console.Write(mensaje);
-                if (int.TryParse(Console.ReadLine(), out int nro) && (nro>0) && (nro<cantidadIndex))
+                if (int.TryParse(Console.ReadLine(), out int nro) && (nro>=0) && (nro<cantidadIndex))
                 {
                     return nro;
                 }
@@ -105,9 +198,9 @@ namespace List.Consola
             }while (true);
         }
 
-        private static void OpcionContin()
+        private static void OpcionContin(string mensaje)
         {
-            Console.WriteLine("¿Desea continuar ingresando a la lista?(Ponga la letra segun la opcion)");
+            Console.WriteLine(mensaje);
             Console.WriteLine("S - Si");
             Console.WriteLine("N - No");
 
@@ -117,7 +210,7 @@ namespace List.Consola
         {
             do { 
             Console.Write(mensaje);
-                if (int.TryParse(Console.ReadLine(), out int nro) &&(nro>0))
+                if (int.TryParse(Console.ReadLine(), out int nro))
                 {
                     return nro;
                 }
